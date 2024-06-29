@@ -25,7 +25,6 @@ Not all requirements from the brief have been implemented due to time. I have ho
 
 #### Things I'd do differently
 * Use some kind of ORM Mapping library to communicate with the database - i started but the bootstrapping was taking too long, for such a simple DB
-
-
-
-Wasnt sure how to lay seats out (rows, cols) so have assumed that all booking will be "best available" where best is defined by lowest number
+* implement auth properly
+* finish the brief
+* I wasn't sure how to lay seats out (rows/cols, etc) so the system just has the concept of available seats
