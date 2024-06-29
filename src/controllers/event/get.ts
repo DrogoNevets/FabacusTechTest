@@ -11,11 +11,15 @@ export default async (req : Request, res : Response) => {
     if(eventId) {
       const event = await Event.getById(eventId, true);
 
+      if(!event) {
+        res.status(404).end();
+      }
+
       const holds = await redis.getHoldCount(eventId);
 
       const retVal = {
         ...event,
-        availableSeats: event.seatCount - (holds + (event.bookings ?? []).reduce((acc, booking) => {
+        availableSeats: event?.seatCount ?? 0 - (holds + (event?.bookings ?? []).reduce((acc, booking) => {
           return acc + booking.seatCount;
         }, 0))
       };

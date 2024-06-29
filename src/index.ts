@@ -6,7 +6,7 @@ import hold from './controllers/hold';
 import { database, redis } from './services';
 
 const app = express();
-const port = process.env.PORT ?? 8080;
+const port = process.env.PORT ?? 80;
 
 app.use(parser.json());
 
@@ -14,7 +14,7 @@ app.use('/event', event);
 app.use('/hold', hold);
 
 app.listen(port, async () => {
-  console.info(`app listening on: ${port}`);
+  console.log(`app listening on: ${port}`);
 
   await database.test();
   await redis.test();

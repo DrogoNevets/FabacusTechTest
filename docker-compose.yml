@@ -24,7 +24,29 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
     volumes: 
       - cache:/data
+    networks:
+      - tech-test
 
+  api:
+    image: drogonevets/fabacus-tech-test
+    restart: unless-stopped
+    ports:
+      - 18082:80
+    environment:
+      # Internal port number, if changed change in `ports` section above
+      - PORT=80
+      # How long seats can be reserved for in seconds
+      - HOLD_DURATION=60
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      # Must match the password provided in `redis` block
+      - REDIS_PASS=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    networks:
+      - tech-test
+      
 volumes:
   database:
   cache:

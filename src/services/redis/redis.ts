@@ -6,7 +6,7 @@ class RedisService {
 
   constructor() {
     this._client = createClient({
-      url: 'redis://:eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81@localhost:18081/0'
+      url: `redis://:${process.env.REDIS_PASS ?? 'eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81'}@${process.env.REDIS_HOST ?? 'localhost'}:${process.env.REDIS_PORT ?? 18081}/${process.env.REDIS_DB ?? 0}`
     });
 
     this._client.on('error', (err) => console.log('Redis Client Error', err));

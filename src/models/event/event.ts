@@ -64,9 +64,14 @@ class Event {
     };
 
     try {
-      const res = database.query(query);
+      const res = await database.query(query);
+      const rawEvent = res.rows.at(0);
 
-      const event = new Event((await res).rows.at(0));
+      if(!rawEvent) {
+        return null;
+      }
+
+      const event = new Event(rawEvent);
 
       if(includeBookings) {
         await event.getBookings();
