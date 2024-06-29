@@ -1,0 +1,33 @@
+# R2D2 docker compose file
+
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16.3-alpine
+    ports:
+      - 18080:5432
+    volumes:
+      - ./database/db.sql:/docker-entrypoint-initdb.d/1-db.sql
+      - database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    networks:
+      - tech-test
+  
+  redis:
+    image: redis:6.2-alpine
+    restart: unless-stopped
+    ports:
+      - '18081:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes: 
+      - cache:/data
+
+volumes:
+  database:
+  cache:
+
+networks:
+  tech-test:
