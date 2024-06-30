@@ -21,8 +21,8 @@ export default async (req : Request, res : Response) => {
     console.log(await Event.create(body.name, body.seat_count).save());
   } catch(e) {
     console.error(e);
-    return res.send(e).status(500).end();
+    return res.status(500).send(e).end();
   }
 
-  res.send('heelo').end();
+  return res.send('heelo').end();
 };
