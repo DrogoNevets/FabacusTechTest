@@ -3,8 +3,7 @@
 
 ### Getting started
 1. Clone the repo locally
-2. Run `yarn build`
-3. Run `docker-compuse up [-d]`
+2. Run `docker-compose up [-d]`
 
 ### Configuration
 All configuration options are exposed in the `.env` file

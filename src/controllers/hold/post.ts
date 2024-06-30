@@ -23,11 +23,13 @@ export default async (req : Request, res : Response) => {
   }
 
   try {
+    // should really check we can hold the requested number of seats 
+    
     await redis.setHold(body.user_id, body.event_id, body.seat_count);
   } catch(e) {
     console.error(e);
     return res.send(e).status(500).end();
   }
 
-  res.send('heelo').end();
+  res.send('ok').end();
 };

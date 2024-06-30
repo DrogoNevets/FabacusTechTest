@@ -24,5 +24,5 @@ export default async (req : Request, res : Response) => {
     return res.status(500).send(e).end();
   }
 
-  return res.send('heelo').end();
+  return res.send('ok').end();
 };

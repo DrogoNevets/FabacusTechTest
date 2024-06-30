@@ -1,9 +1,14 @@
-FROM node:20-alpine
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-WORKDIR /home/node/app
-COPY package*.json ./
-USER node
-RUN yarn
-COPY --chown=node:node dist .
-EXPOSE 80
-CMD [ "node", "index.js" ]
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+COPY . .
+RUN yarn build
+
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/package.json /app/yarn.lock ./
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+
+CMD ["node", "dist/index.js"]

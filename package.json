@@ -29,8 +29,8 @@
     "globals": "^15.6.0"
   },
   "scripts": {
-    "build": "yarn build:code && yarn build:docker",
-    "build:code": "yarn tsc",
+    "build": "yarn build:local",
+    "build:local": "yarn tsc",
     "build:docker": "docker build . -t drogonevets/fabacus-tech-test:1.0.0",
     "lint": "yarn eslint"
   }

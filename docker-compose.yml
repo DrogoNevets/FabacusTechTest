@@ -45,6 +45,9 @@ services:
           memory: 512M
 
   api:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: drogonevets/fabacus-tech-test:${API_VERSION:-latest}
     restart: unless-stopped
     ports:

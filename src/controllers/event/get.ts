@@ -25,13 +25,6 @@ export default async (req : Request, res : Response) => {
       };
 
       res.send(retVal).end();
-
-      // results = {
-      //   ...event,
-      //   remainingSeats: event!.seat_count! - (await event!.bookings).reduce((acc, booking) => {
-      //     return acc + booking!.seat_count;
-      //   }, 0)
-      // };
     } else {
       results = await Event.getAll();
     }
