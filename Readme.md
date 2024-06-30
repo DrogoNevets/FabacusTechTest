@@ -7,7 +7,7 @@
 3. Run `docker-compuse up [-d]`
 
 ### Configuration
-All configuration options are exposed in the `docker-compose` file
+All configuration options are exposed in the `.env` file
 
 ### Functionality
 Not all requirements from the brief have been implemented due to time. I have however attempted to architect in a way that show cases my abilities across the board using the technologies chosen.

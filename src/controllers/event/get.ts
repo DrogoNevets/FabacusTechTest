@@ -19,7 +19,7 @@ export default async (req : Request, res : Response) => {
 
       const retVal = {
         ...event,
-        availableSeats: event?.seatCount ?? 0 - (holds + (event?.bookings ?? []).reduce((acc, booking) => {
+        availableSeats: (event?.seatCount ?? 0) - (holds + (event?.bookings ?? []).reduce((acc, booking) => {
           return acc + booking.seatCount;
         }, 0))
       };

@@ -1,49 +1,83 @@
 version: "3.8"
-
 services:
   postgres:
     image: postgres:16.3-alpine
     ports:
-      - 18080:5432
+      - "${DB_PORT:-18080}:5432"
     volumes:
       - ./database/db.sql:/docker-entrypoint-initdb.d/1-db.sql
       - database:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
     networks:
       - tech-test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
   
   redis:
     image: redis:6.2-alpine
     restart: unless-stopped
     ports:
-      - '18081:6379'
-    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+      - '${REDIS_PORT:-18081}:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
     volumes: 
       - cache:/data
     networks:
       - tech-test
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
 
   api:
-    image: drogonevets/fabacus-tech-test
+    image: drogonevets/fabacus-tech-test:${API_VERSION:-latest}
     restart: unless-stopped
     ports:
-      - 18082:80
+      - ${API_PORT:-18082}:80
     environment:
-      # Internal port number, if changed change in `ports` section above
       - PORT=80
-      # How long seats can be reserved for in seconds
-      - HOLD_DURATION=60
+      - HOLD_DURATION=${HOLD_DURATION:-60}
       - DB_HOST=postgres
       - DB_PORT=5432
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_DB=0
-      # Must match the password provided in `redis` block
-      - REDIS_PASS=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+      - REDIS_PASS=${REDIS_PASSWORD}
     networks:
       - tech-test
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${API_PORT:-80}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "10"
       
 volumes:
   database:
