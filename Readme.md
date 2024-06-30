@@ -1,9 +1,17 @@
 # Fabacus Tech Test
 ## Steve Coleman-Williams
 
-### Getting started
+### Getting started (Docker)
 1. Clone the repo locally
 2. Run `docker-compose up [-d]`
+
+### Getting started (local)
+Unusually I have included my `.vscode` directory to aid you.
+
+1. Clone repo locally
+2. Run `docker-compose up [-d]`
+    * Ignore the `drogonevets/fabacus-tech-test` image, or remove it
+3. in VSCode run the only profile that should be picked up (it will start on a different port to the default for docker)
 
 ### Configuration
 All configuration options are exposed in the `.env` file
